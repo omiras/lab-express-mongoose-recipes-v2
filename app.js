@@ -77,6 +77,23 @@ app.get('/recipes', async (req, res) => {
 
 //  Iteration 5 - Get a Single Recipe
 //  GET  /recipes/:id route
+app.get('/recipes/:id', (req, res) => {
+
+    // El objeto req.params contiene todos los parámetros dinámicos de la ruta
+    const { id } = req.params;
+
+    Recipe.findById(id)
+        .then(document => {
+            if (!document) {
+                return res.status(404).send('Document not found for the given id');
+            }
+            res.send(document);
+        })
+        .catch(err => {
+            res.status(500).send('Error while retrieving document : ' + err.message);
+        })
+
+})
 
 
 //  Iteration 6 - Update a Single Recipe
