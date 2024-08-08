@@ -4,7 +4,8 @@ const { Schema, model } = require('mongoose');
 const recipeSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     instructions: {
         type: String,
@@ -35,4 +36,4 @@ const recipeSchema = new Schema({
 
 const Recipe = model('Recipe', recipeSchema);
 
-export default Recipe;
+module.exports = Recipe;
