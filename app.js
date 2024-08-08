@@ -58,17 +58,22 @@ app.post('/recipes', (req, res) => {
 })
 
 
+
 //  Iteration 4 - Get All Recipes
 //  GET  /recipes route
 app.get('/recipes', async (req, res) => {
     try {
         const recipes = await Recipe.find();
-        res.send(recipes);
+        res.json(recipes);
     }
 
     catch (err) {
         // Status code: 500 (Internal Server Error) in case of an error.
-        res.status(500).send(err.message);
+        res.status(500).json(err.message);
+
+        // err.message -> 'DAtabse MongoDB on url blabla.atlas.com is down'
+
+        // En una aplicación real a lo mejor no es la mejor opción enviar demasiados detalles de lo que ha pasado. 
     }
 
 
@@ -85,12 +90,12 @@ app.get('/recipes/:id', (req, res) => {
     Recipe.findById(id)
         .then(document => {
             if (!document) {
-                return res.status(404).send('Document not found for the given id');
+                return res.status(404).json('Document not found for the given id');
             }
-            res.send(document);
+            res.json(document);
         })
         .catch(err => {
-            res.status(500).send('Error while retrieving document : ' + err.message);
+            res.status(500).json('Error while retrieving document : ' + err.message);
         })
 
 })
@@ -105,15 +110,15 @@ app.put('/recipes/:id', (req, res) => {
     const { id } = req.params;
 
     // Está bien pensado en meter "todo" el req.body aquí. Porque tan solo vamos a recibir aquellos datos el cliente quiere actualizar. (Imagina que solo quiere actualizar el title de la receta...)
-    Recipe.findByIdAndUpdate(id, req.body)
+    Recipe.findByIdAndUpdate(id, req.body, { new: true })
         .then(document => {
             if (!document) {
-                return res.status(404).send('Document not found for the given id');
+                return res.status(404).json('Document not found for the given id');
             }
-            res.send(document);
+            res.json(document);
         })
         .catch(err => {
-            res.status(500).send('Error while updating document : ' + err.message);
+            res.status(500).json('Error while updating document : ' + err.message);
         })
 
 });
@@ -126,10 +131,10 @@ app.delete('/recipes/:id', async (req, res) => {
 
     try {
         await Recipe.findByIdAndDelete(id);
-        res.status(204).send();
+        res.status(204).json("");
 
     } catch (err) {
-        res.status(500).send('Error while deleting document: ' + err.message);
+        res.status(500).json('Error while deleting document: ' + err.message);
     }
 });
 
