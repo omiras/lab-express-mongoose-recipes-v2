@@ -98,6 +98,25 @@ app.get('/recipes/:id', (req, res) => {
 
 //  Iteration 6 - Update a Single Recipe
 //  PUT  /recipes/:id route
+app.put('/recipes/:id', (req, res) => {
+
+
+    // 2. id de la ruta dinámica
+    const { id } = req.params;
+
+    // Está bien pensado en meter "todo" el req.body aquí. Porque tan solo vamos a recibir aquellos datos el cliente quiere actualizar. (Imagina que solo quiere actualizar el title de la receta...)
+    Recipe.findByIdAndUpdate(id, req.body)
+        .then(document => {
+            if (!document) {
+                return res.status(404).send('Document not found for the given id');
+            }
+            res.send(document);
+        })
+        .catch(err => {
+            res.status(500).send('Error while updating document : ' + err.message);
+        })
+
+});
 
 
 //  Iteration 7 - Delete a Single Recipe
