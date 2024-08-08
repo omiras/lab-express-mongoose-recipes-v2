@@ -18,8 +18,7 @@ const mongoose = require("mongoose");
 
 const MONGODB_URI = "mongodb+srv://oscar:oscar@cluster0.c8tq0vp.mongodb.net/express-mongoose-recipes-dev";
 
-mongoose
-    .connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI)
     .then((x) => console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`))
     .catch((err) => console.error("Error connecting to mongo", err));
 
@@ -61,7 +60,20 @@ app.post('/recipes', (req, res) => {
 
 //  Iteration 4 - Get All Recipes
 //  GET  /recipes route
+app.get('/recipes', async (req, res) => {
+    try {
+        const recipes = await Recipe.find();
+        res.send(recipes);
+    }
 
+    catch (err) {
+        // Status code: 500 (Internal Server Error) in case of an error.
+        res.status(500).send(err.message);
+    }
+
+
+
+});
 
 //  Iteration 5 - Get a Single Recipe
 //  GET  /recipes/:id route
